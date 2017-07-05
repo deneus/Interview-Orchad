@@ -1,0 +1,7 @@
+name = Orchad interview.
+description = Update the banner based on the root menu item.
+core = 7.x
+package = Orchad
+version = "7.x-1.0"
+core = "7.x"
+

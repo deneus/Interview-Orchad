@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Orchad Marketing demo module.
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function orchad_block_info() {
+  $blocks = array();
+  $blocks['banner_block'] = array(
+    'info' => t('Custom Banner'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function orchad_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'banner_block':
+      $image = '';
+
+      // Get the actual node.
+      $node = menu_get_object();
+
+      // Get the node parent.
+      $active_trail = menu_get_active_trail();
+      end($active_trail);
+      $parent = prev($active_trail);
+
+      /*
+       * Note: if we want to make it recursive for every possible level of the
+       * menu, it would be done here.
+       */
+      // Test for the depth of the menu item.
+      $depth = 0;
+      if (isset($parent['depth'])) {
+        $depth = $parent['depth'];
+      }
+
+      /*
+       * Note: if I was using the module menu_attributes I could have make this
+       * test on something more reliable than then title like an id by example.
+       */
+      // Check for the title.
+      $title = $parent['title'];
+      if ($depth === 0) {
+        $title = $node->title;
+      }
+
+      switch (strtolower($title)) {
+        case 'root a':
+          $image = 'https://dummyimage.com/350x150/ff0000/fff';
+          break;
+
+        case 'root b':
+          $image = 'https://dummyimage.com/350x150/006fff/fff';
+          break;
+      }
+
+      $html = '<div class="banner" style="background-image: url(' . $image . '); 
+      height:150px"></div>';
+
+      $block['subject'] = t('Block Title');
+      $block['content'] = $html;
+      break;
+  }
+  return $block;
+}
